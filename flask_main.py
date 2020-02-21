@@ -4,8 +4,6 @@ from datetime import datetime
 import logging
 import os
 
-#from google.cloud import datastore
-#from google.cloud import storage
 
 app = Flask(__name__)
 
@@ -41,17 +39,17 @@ def upload_sound():
         
         separate()
         
-        uploads = os.path.join(app.config['UPLOAD_FOLDER'])
+        uploads = os.path.join(app.config['UPLOAD_FOLDER'], 'my_audio')
         print(uploads, FILE_NAME)
-        return send_from_directory(directory=uploads, filename=FILE_NAME, as_attachment=True)
+        return send_from_directory(directory=uploads, filename='vocals.wav', as_attachment=True)
     
     uploads = os.path.join(app.config['UPLOAD_FOLDER'])
     print(uploads, file.filename)
     return send_from_directory(directory=uploads, filename=FILE_NAME)
 	
 def separate():
-    print('foi')
-    os.system('spleeter separate -i ' + os.path.join(app.config['UPLOAD_FOLDER']) + FILE_NAME + ' -c mp3 -o '+ os.path.join(app.config['UPLOAD_FOLDER']))
+    print('spleeter separate -i ' + os.path.join(app.config['UPLOAD_FOLDER'],FILE_NAME) + '  -o '+ os.path.join(app.config['UPLOAD_FOLDER']))
+    os.system('spleeter separate -i ' + os.path.join(app.config['UPLOAD_FOLDER'],FILE_NAME) + ' -o '+ os.path.join(app.config['UPLOAD_FOLDER']))
 	
 @app.errorhandler(500)
 def server_error(e):
